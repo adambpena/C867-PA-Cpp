@@ -105,20 +105,20 @@ DegreeProgram Student::getDegreeProgram() const {
 }
 
 void Student::print() const{
-    std::cout << "Student ID: " << studentID << "\n"
-    << "First Name: " << firstName << "\n"
-    << "Last Name: " << lastName << "\n"
-    << "Email Address: " << emailAddress << "\n"
-    << "Age: " << age << "\n"
+    std::cout << "Student ID: " << getStudentID()<< "\n"
+    << "First Name: " << getFirstName() << "\n"
+    << "Last Name: " << getLastName() << "\n"
+    << "Email Address: " << getEmailAddress() << "\n"
+    << "Age: " << getAge() << "\n"
     << "Days to Complete Courses: {";
     for(int i = 0; i < 3; i++){
-        std::cout << daysToComplete[i];
+        std::cout << getDaysToComplete()[i];
         if(i < 2){
             std::cout << ", ";
         }
     }
     std::cout << "}\n"
-    << "Degree Program: " <<  degreeProgram;
+    << "Degree Program: " <<  getDegreeProgram();
 }
 
 int main(int argc, char const *argv[])
