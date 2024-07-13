@@ -94,6 +94,23 @@ void Roster::add(std::string studentId, std::string firstName, std::string lastN
     // }
 };
 
+void Roster::remove(std::string studentId){
+    bool studentFound = false;
+    for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
+        std::string foundId = classRosterArray[i]->getStudentID();
+        if(foundId == studentId){
+            delete classRosterArray[i];
+            classRosterArray[i] = nullptr;
+            studentFound = true;
+            break;
+        }
+    }
+
+    if(!studentFound){
+        std::cout << "Student with the ID " << studentId << " was not found for removal."
+    }
+}
+
 void Roster::printAll(){
     for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
         classRosterArray[i]->print();
