@@ -72,18 +72,20 @@ DegreeProgram Student::getDegreeProgram() const {
 }
 
 void Student::print() const {
-    std::cout << studentID << "\t"
-              << "First Name: " << firstName << "\t"
-              << "Last Name: " << lastName << "\t"
-              << "Age: " << age << "\t"
+    std::cout << getStudentID() << "\t"
+              << "First Name: " << getFirstName() << "\t"
+              << "Last Name: " << getLastName() << "\t"
+              << "Age: " << getAge() << "\t"
               << "daysInCourse: {";
+    const int* days = getDaysToComplete();
     for (int i = 0; i < 3; i++) {
-        std::cout << daysToComplete[i];
+        std::cout << days[i];
         if (i < 2) {
             std::cout << ", ";
         }
     }
     std::string degreeProgramStr;
+    DegreeProgram degreeProgram = getDegreeProgram();
     if (degreeProgram == DegreeProgram::SECURITY) {
         degreeProgramStr = "SECURITY";
     } else if (degreeProgram == DegreeProgram::NETWORK) {
