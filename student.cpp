@@ -83,6 +83,15 @@ void Student::print() const {
             std::cout << ", ";
         }
     }
+    std::string degreeProgramStr;
+    if (degreeProgram == DegreeProgram::SECURITY) {
+        degreeProgramStr = "SECURITY";
+    } else if (degreeProgram == DegreeProgram::NETWORK) {
+        degreeProgramStr = "NETWORK";
+    } else if (degreeProgram == DegreeProgram::SOFTWARE) {
+        degreeProgramStr = "SOFTWARE";
+    }
+
     std::cout << "} "
-              << "Degree Program: " << degreeProgram << "\n";
+              << "Degree Program: " << degreeProgramStr << "\n";
 }
