@@ -18,6 +18,13 @@ using namespace std;
 
 std::string degreeProgramStrings[] = { "SECURITY", "NETWORK", "SOFTWARE" };
 
+Roster::Roster() {
+    // Initialize classRosterArray with nullptrs to keep track of empty spots
+    for (int i = 0; i < 5; ++i) {
+        classRosterArray[i] = nullptr;
+    }
+}
+
 void Roster::parse(std::string studentData){
     size_t rhs = studentData.find(",");
     std::string studentID = studentData.substr(0, rhs);
@@ -62,10 +69,33 @@ void Roster::parse(std::string studentData){
     } else if (degree == "SOFTWARE") {
         degreeProgram = DegreeProgram::SOFTWARE;
     }
+
     add(studentID, firstName, lastName, emailAddress, age, daysInCourse1, daysInCourse2, daysInCourse3, degreeProgram);
 
 };
 
 void Roster::add(std::string studentId, std::string firstName, std::string lastName, std::string emailAddress, int age, int daysInCourse1, int daysInCourse2, int daysInCourse3, DegreeProgram degreeProgram){
-    cout << studentId << firstName << lastName << emailAddress << age << daysInCourse1 << daysInCourse2 << daysInCourse3 << degreeProgram;
+    // cout << studentId << firstName << lastName << emailAddress << age << daysInCourse1 << daysInCourse2 << daysInCourse3 << degreeProgram;
+    int daysToComplete[3] = {daysInCourse1, daysInCourse2, daysInCourse3};
+    Student *studentToAdd = new Student(studentId, firstName, lastName, emailAddress, age, daysToComplete, degreeProgram);
+    int addAt = -1;
+    for(int i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
+        if(classRosterArray[i] == nullptr){
+            addAt = i;
+            break;
+        };
+    }
+
+    if(addAt > -1){
+        classRosterArray[addAt] = studentToAdd;
+    }
+    // else{
+    //     throw std::runtime_error("Class Roster Is Full");
+    // }
 };
+
+void Roster::printAll(){
+    for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
+        classRosterArray[i]->print();
+    }
+}
