@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include "roster.h"
 using namespace std;
 
@@ -20,8 +21,17 @@ std::string degreeProgramStrings[] = { "SECURITY", "NETWORK", "SOFTWARE" };
 
 Roster::Roster() {
     // Initialize classRosterArray with nullptrs to keep track of empty spots
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); ++i) {
         classRosterArray[i] = nullptr;
+    }
+}
+
+Roster::~Roster() {
+    for (int i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); ++i) {
+        if(classRosterArray[i] != nullptr){
+            delete classRosterArray[i];
+            classRosterArray[i] = nullptr;
+        }
     }
 }
 
@@ -89,30 +99,72 @@ void Roster::add(std::string studentId, std::string firstName, std::string lastN
     if(addAt > -1){
         classRosterArray[addAt] = studentToAdd;
     }
-    // else{
-    //     throw std::runtime_error("Class Roster Is Full");
-    // }
 };
 
 void Roster::remove(std::string studentId){
     bool studentFound = false;
     for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
-        std::string foundId = classRosterArray[i]->getStudentID();
-        if(foundId == studentId){
-            delete classRosterArray[i];
-            classRosterArray[i] = nullptr;
-            studentFound = true;
-            break;
+        if(classRosterArray[i] != nullptr){
+            std::string foundId = classRosterArray[i]->getStudentID();
+            if(foundId == studentId){
+                delete classRosterArray[i];
+                classRosterArray[i] = nullptr;
+                studentFound = true;
+                break;
+            }
         }
     }
 
     if(!studentFound){
-        std::cout << "Student with the ID " << studentId << " was not found for removal."
+        std::cout << "Student with the ID " << studentId << " was not found for removal.\n";
     }
 }
 
 void Roster::printAll(){
     for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
-        classRosterArray[i]->print();
+        if(classRosterArray[i] != nullptr){
+            classRosterArray[i]->print();
+        }
     }
+}
+
+void Roster::printAverageDaysInCourse(std::string studentId){
+    double sum = 0.0;
+    for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
+        std::string foundId = classRosterArray[i]->getStudentID();
+        if(foundId == studentId){
+            const int *daysArr = classRosterArray[i]->getDaysToComplete();
+            for(size_t j = 0; j < sizeof(daysArr) / sizeof(daysArr[0]); j++){
+                sum += static_cast<double>(daysArr[j]);
+            }
+        }
+    }
+    double avg = sum / 3.0;
+    std::cout << "Student ID: " << studentId << ", average days in course is: " << static_cast<int>(avg) << "\n";
+}
+
+void Roster::printInvalidEmails(){ // Traverse through class roster and use Regex validation to validate. Return invalid emails
+    const std::regex emailPattern(R"(^[\w.%+-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$)"); // Regex to match email style string with no space, an @ symbol, and a .
+    for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
+        std::string studentEmail = classRosterArray[i]->getEmailAddress();
+        if(!std::regex_match(studentEmail, emailPattern)){
+            std::cout << studentEmail << "\n";
+        }
+    }
+
+}
+void Roster::printByDegreeProgram(DegreeProgram degreeProgram){ // Call print method of students in roster w/ matching degree program
+    bool studentFound = false;
+    for(size_t i = 0; i < sizeof(classRosterArray) / sizeof(classRosterArray[0]); i++){
+        DegreeProgram studentDegree = classRosterArray[i]->getDegreeProgram();
+        if(studentDegree == degreeProgram){
+            classRosterArray[i]->print();
+            studentFound = true;
+        }
+    }
+    
+    if(!studentFound){
+        std::cout << "No student with this degree is on the roster";
+    }
+
 }
