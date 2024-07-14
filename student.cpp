@@ -94,6 +94,6 @@ void Student::print() const {
         degreeProgramStr = "SOFTWARE";
     }
 
-    std::cout << "} "
+    std::cout << "} \t"
               << "Degree Program: " << degreeProgramStr << "\n";
 }
