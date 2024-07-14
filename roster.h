@@ -8,6 +8,7 @@ class Roster
         Student *classRosterArray[5];
 
         Roster();
+        ~Roster();
         void parse(std::string studentData); // Populates classRosterArray (calls Add to create Student objects and add them)
         void add(std::string studentId, std::string firstName, std::string lastName, std::string emailAddress, int age, int daysInCourse1, int daysInCourse2, int daysInCourse3, DegreeProgram degreeProgram); // Called within parse
         void remove(std::string studentId); // Destroy memory of student if found w/ "delete", if not report error "The student with the ID: {id}" was not found.
